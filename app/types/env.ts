@@ -3,7 +3,6 @@ export interface Env {
   FIGMA_ORIGINAL_DESIGN: string
   PROJECT_TITLE: string
   BASE_URL: string
-  COUNTER_DEV_ID: string
   TREFLE_API_KEY: string
   FACEBOOK_ID: string
   YOUTUBE_USERNAME: string
