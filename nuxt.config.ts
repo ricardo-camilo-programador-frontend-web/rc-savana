@@ -7,21 +7,6 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   srcDir: './app/',
 
-  app: {
-    head: {
-      script: [
-        {
-          'src': 'https://cdn.counter.dev/script.js',
-          'type': 'text/javascript',
-          'defer': true,
-          'data-id': process.env.NUXT_PUBLIC_COUNTER_DEV_ID,
-          'data-utcoffset': '-3',
-          'async': true,
-        },
-      ],
-    },
-  },
-
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -149,7 +134,6 @@ export default defineNuxtConfig({
       FIGMA_ORIGINAL_DESIGN: process.env.NUXT_PUBLIC_FIGMA_ORIGINAL_DESIGN,
       PROJECT_TITLE: process.env.NUXT_PUBLIC_PROJECT_TITLE,
       BASE_URL: process.env.NUXT_PUBLIC_BASE_URL,
-      COUNTER_DEV_ID: process.env.NUXT_PUBLIC_COUNTER_DEV_ID,
       TREFLE_API_KEY: process.env.NUXT_PUBLIC_TREFLE_API_KEY,
       FACEBOOK_ID: process.env.NUXT_PUBLIC_FACEBOOK_ID,
       YOUTUBE_USERNAME: process.env.NUXT_PUBLIC_YOUTUBE_USERNAME,
