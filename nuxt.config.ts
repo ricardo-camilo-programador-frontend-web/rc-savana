@@ -130,6 +130,17 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      // Analytics: NUXT_PUBLIC_<CHAVE> sobrescreve em runtime; DEFAULTS em app/lib/analytics/config.ts
+      ANALYTICS_ENABLED: process.env.NUXT_PUBLIC_ANALYTICS_ENABLED,
+      CLARITY_ID: process.env.NUXT_PUBLIC_CLARITY_ID,
+      GA4_ID: process.env.NUXT_PUBLIC_GA4_ID,
+      GTM_ENABLED: process.env.NUXT_PUBLIC_GTM_ENABLED,
+      GTM_GA4_ID: process.env.NUXT_PUBLIC_GTM_GA4_ID,
+      COUNTER_ID: process.env.NUXT_PUBLIC_COUNTER_ID,
+      COUNTER_UTCOFFSET: process.env.NUXT_PUBLIC_COUNTER_UTCOFFSET,
+      // Legados (fallback): NUXT_PUBLIC_GA_MEASUREMENT_ID, NUXT_PUBLIC_COUNTER_DEV_ID
+      GA_MEASUREMENT_ID: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID,
+      COUNTER_DEV_ID: process.env.NUXT_PUBLIC_COUNTER_DEV_ID,
       FIGMA_USERNAME: process.env.NUXT_PUBLIC_FIGMA_USERNAME,
       FIGMA_ORIGINAL_DESIGN: process.env.NUXT_PUBLIC_FIGMA_ORIGINAL_DESIGN,
       PROJECT_TITLE: process.env.NUXT_PUBLIC_PROJECT_TITLE,

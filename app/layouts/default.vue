@@ -3,6 +3,7 @@ import type { Env } from '~/types/env'
 
 const nuxtApp = useNuxtApp()
 const $env = nuxtApp.$env as Env
+const analytics = useAnalyticsConfig()
 
 useHead({
   title: $env.PROJECT_TITLE,
@@ -29,9 +30,9 @@ useHead({
     />
 
     <ClientOnly>
-      <noscript>
+      <noscript v-if="analytics.loadGtm">
         <iframe
-        :src="`https://www.googletagmanager.com/ns.html?id=${$env.GTM_ID}`"
+        :src="`https://www.googletagmanager.com/ns.html?id=${analytics.gtmId}`"
         height="0"
         width="0"
         style="display: none; visibility: hidden"
