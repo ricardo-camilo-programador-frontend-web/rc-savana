@@ -33,11 +33,11 @@ export default defineNuxtPlugin(() => {
 
   // Consentimento pré-existente (IntroWarning): 'false' desliga o GTM.
   if (localStorage.getItem(ANALYTICS_CONSENT_KEY) === 'false') {
+    // Opt-out explícito: não carrega nenhum provedor direto (GA4, Clarity, counter.dev).
     disableGtm()
+    return
   }
-  else {
-    enableGtm(config)
-  }
+  enableGtm(config)
 
   if (config.loadGtag) {
     injectScript({
