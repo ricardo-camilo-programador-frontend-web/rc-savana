@@ -18,13 +18,18 @@ export const DEFAULTS = {
   gtmClarityId: 'GTM-5KHXDZ2W' as string,
 } as const
 
-type Env = Record<string, string | undefined>
+type Env = Record<string, unknown>
 
 const PLACEHOLDERS = new Set(['G-XXXXXXXXXX', 'GTM-XXXXXXX'])
 
-function pick(...values: Array<string | undefined>): string {
+// Nuxt runtimeConfig converte "false"/"-3" em boolean/number: normaliza p/ string.
+function str(value: unknown): string | undefined {
+  return value === undefined || value === null ? undefined : String(value)
+}
+
+function pick(...values: Array<unknown>): string {
   for (const value of values) {
-    const trimmed = value?.trim()
+    const trimmed = str(value)?.trim()
     if (trimmed && !PLACEHOLDERS.has(trimmed)) {
       return trimmed
     }
@@ -48,11 +53,11 @@ export interface AnalyticsConfig {
 // Chaves = runtimeConfig.public flat (NUXT_PUBLIC_X sobrescreve a chave X).
 // Legados lidos como fallback: GA_MEASUREMENT_ID (GA4), COUNTER_DEV_ID (counter).
 export function resolveAnalyticsConfig(env: Env): AnalyticsConfig {
-  const enabled = (env.ANALYTICS_ENABLED ?? 'true').trim() !== 'false'
+  const enabled = (str(env.ANALYTICS_ENABLED) ?? 'true').trim() !== 'false'
   const ga4Id = pick(env.GA4_ID, env.GA_MEASUREMENT_ID) || DEFAULTS.ga4Id
   const gtmId = pick(env.GTM_ID) || DEFAULTS.gtmId
   const gtmEnabled
-    = (env.GTM_ENABLED ?? (DEFAULTS.gtmEnabled ? 'true' : 'false')).trim()
+    = (str(env.GTM_ENABLED) ?? (DEFAULTS.gtmEnabled ? 'true' : 'false')).trim()
       === 'true'
   const gtmGa4Id = pick(env.GTM_GA4_ID) || DEFAULTS.gtmGa4Id
   const loadGtm = enabled && gtmEnabled && gtmId !== ''
