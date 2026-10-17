@@ -7,10 +7,6 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   srcDir: './app/',
 
-  app: {
-    head: {},
-  },
-
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -149,7 +145,7 @@ export default defineNuxtConfig({
       FIGMA_ORIGINAL_DESIGN: process.env.NUXT_PUBLIC_FIGMA_ORIGINAL_DESIGN,
       PROJECT_TITLE: process.env.NUXT_PUBLIC_PROJECT_TITLE,
       BASE_URL: process.env.NUXT_PUBLIC_BASE_URL,
-      TREFLE_API_KEY: process.env.TREFLE_API_KEY,
+      TREFLE_API_KEY: process.env.NUXT_PUBLIC_TREFLE_API_KEY,
       FACEBOOK_ID: process.env.NUXT_PUBLIC_FACEBOOK_ID,
       YOUTUBE_USERNAME: process.env.NUXT_PUBLIC_YOUTUBE_USERNAME,
       LIVE_DEMO_VIDEO_URL: process.env.NUXT_PUBLIC_LIVE_DEMO_VIDEO_URL,
