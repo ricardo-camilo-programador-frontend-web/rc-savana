@@ -18,9 +18,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -42,9 +41,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -66,9 +64,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -113,9 +110,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -138,9 +134,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -186,9 +181,8 @@ jobs:
           fetch-depth: 0
 
       - name: Setup pnpm
+        # versão vem do campo packageManager do package.json
         uses: pnpm/action-setup@v4
-        with:
-          version: 9.15.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
