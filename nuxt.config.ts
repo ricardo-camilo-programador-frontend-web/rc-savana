@@ -7,6 +7,34 @@ import { defineNuxtConfig } from 'nuxt/config'
 export default defineNuxtConfig({
   srcDir: './app/',
 
+  app: {
+    head: {
+      htmlAttrs: { lang: 'pt-BR' },
+      title: 'Savana Pet Shop - Sua Loja de Produtos para Animais',
+      meta: [
+        {
+          name: 'description',
+          content:
+            'Encontre os melhores produtos para seu pet: rações, brinquedos, acessórios e muito mais. Entrega para todo o Brasil.',
+        },
+        {
+          property: 'og:title',
+          content: 'Savana Pet Shop - Sua Loja de Produtos para Animais',
+        },
+        {
+          property: 'og:description',
+          content:
+            'Encontre os melhores produtos para seu pet: rações, brinquedos, acessórios e muito mais. Entrega para todo o Brasil.',
+        },
+        { property: 'og:type', content: 'website' },
+        {
+          property: 'og:url',
+          content: 'https://savana-nuxtjs-chronicles-part-1.netlify.app',
+        },
+      ],
+    },
+  },
+
   css: ['~/assets/css/main.css'],
   postcss: {
     plugins: {
@@ -41,9 +69,9 @@ export default defineNuxtConfig({
       },
       {
         code: 'pt',
-        language: 'pt',
+        language: 'pt-BR',
         name: 'Português',
-        iso: 'pt',
+        iso: 'pt-BR',
         file: 'pt.ts',
       },
     ],

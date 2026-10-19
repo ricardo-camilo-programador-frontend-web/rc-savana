@@ -97,6 +97,7 @@ const localePath = useLocalePath()
               width="25"
               height="25"
               loading="eager"
+              fetch-priority="high"
             />
 
             <div class="bottom-0 mt-auto flex items-center justify-center">
