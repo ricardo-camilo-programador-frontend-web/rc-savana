@@ -75,3 +75,13 @@ describe('Robots SEO (public/robots.txt)', () => {
     expect(content).toMatch(/^Sitemap:\s*https?:\/\/.+\/sitemap\.xml/m)
   })
 })
+
+describe('netlify.toml CSP', () => {
+  it('permite a API do Iconify e os provedores de analytics', () => {
+    const toml = readFileSync('netlify.toml', 'utf8')
+    const connect = toml.match(/connect-src([^;]*)/)?.[1] ?? ''
+    for (const host of ['https://api.iconify.design', 'https://*.google-analytics.com', 'https://*.clarity.ms', 'https://t.counter.dev']) {
+      expect(connect).toContain(host)
+    }
+  })
+})
