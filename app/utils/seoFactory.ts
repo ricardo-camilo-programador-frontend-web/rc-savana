@@ -38,14 +38,14 @@ function generateAlternateLinks(
   paths: SEOContent['paths'],
   includeXDefault = false,
 ) {
-  const links = [
+  const links: Array<{ rel: 'alternate', hreflang: string, href: string }> = [
     {
-      rel: 'alternate',
+      rel: 'alternate' as const,
       hreflang: 'pt',
       href: `${BASE_URL}/pt${paths.pt}`,
     },
     {
-      rel: 'alternate',
+      rel: 'alternate' as const,
       hreflang: 'en',
       href: `${BASE_URL}/en${paths.en}`,
     },
@@ -53,7 +53,7 @@ function generateAlternateLinks(
 
   if (includeXDefault) {
     links.push({
-      rel: 'alternate',
+      rel: 'alternate' as const,
       hreflang: 'x-default',
       href: `${BASE_URL}/`,
     })
@@ -62,15 +62,19 @@ function generateAlternateLinks(
   return links
 }
 
-export function createSEO(locale: string, content: SEOContent) {
+// Tipo de entrada do useHead (unhead 3 restringe name/property a literais conhecidos)
+type HeadInput = Parameters<typeof useHead>[0]
+
+export function createSEO(locale: string, content: SEOContent): HeadInput {
   const title = getLocalizedValue(content.titles, locale)
   const description = getLocalizedValue(content.descriptions, locale)
-  const ogUrl = content.ogUrl || BASE_URL
+  const localePath = locale === 'en' ? content.paths.en : content.paths.pt
+  const ogUrl = content.ogUrl || `${BASE_URL}/${locale === 'en' ? 'en' : 'pt'}${localePath}`
   const ogImage = content.ogImage || DEFAULT_OG_IMAGE
   const alternateLocales = SUPPORTED_LOCALES.filter(lang => lang !== locale)
   const includeAuthor = content.includeAuthor !== false
 
-  const meta = [
+  const meta: Array<{ name?: string, property?: string, content: string }> = [
     {
       name: 'description',
       content: description,
@@ -98,10 +102,10 @@ export function createSEO(locale: string, content: SEOContent) {
       content: ogImage,
     },
     { property: 'og:locale', content: locale },
-    {
+    ...alternateLocales.map(alternate => ({
       property: 'og:locale:alternate',
-      content: alternateLocales,
-    },
+      content: alternate,
+    })),
     { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
     { name: 'language', content: locale },
     { name: 'revisit-after', content: '7 days' },
@@ -118,12 +122,11 @@ export function createSEO(locale: string, content: SEOContent) {
       name: 'twitter:image',
       content: ogImage,
     },
-    ...generateAlternateLinks(content.paths, content.includeXDefault),
   ]
 
   if (includeAuthor) {
-    const alternateIndex = meta.findIndex(
-      m => 'property' in m && m.property === 'og:locale:alternate',
+    const alternateIndex = meta.findLastIndex(
+      m => m.property === 'og:locale:alternate',
     )
     if (alternateIndex !== -1) {
       meta.splice(alternateIndex + 1, 0, {
@@ -136,5 +139,7 @@ export function createSEO(locale: string, content: SEOContent) {
   return {
     title,
     meta,
-  }
+    // hreflang é <link>, não <meta>
+    link: generateAlternateLinks(content.paths, content.includeXDefault),
+  } as HeadInput
 }

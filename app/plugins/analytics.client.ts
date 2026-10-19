@@ -49,6 +49,7 @@ export default defineNuxtPlugin(() => {
     // e nenhum hit /g/collect era enviado.
     window_.gtag = function gtag() {
       // eslint-disable-next-line prefer-rest-params
+      // biome-ignore lint/complexity/noArguments: gtag.js requires the arguments object
       window_.dataLayer?.push(arguments)
     }
     window_.gtag('js', new Date())

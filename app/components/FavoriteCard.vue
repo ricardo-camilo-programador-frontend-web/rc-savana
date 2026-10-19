@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
+
 interface FavoriteCardProps {
   favoriteProducts: Array<Product>
   showMenu: boolean
