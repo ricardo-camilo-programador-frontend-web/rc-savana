@@ -10,6 +10,7 @@ import {
 
 interface AnalyticsWindow {
   dataLayer?: Array<unknown>
+  gtag?: (...args: Array<unknown>) => void
 }
 
 function injectScript(attributes: Record<string, string>, inline = ''): void {
@@ -32,11 +33,11 @@ export default defineNuxtPlugin(() => {
 
   // Consentimento pré-existente (IntroWarning): 'false' desliga o GTM.
   if (localStorage.getItem(ANALYTICS_CONSENT_KEY) === 'false') {
+    // Opt-out explícito: não carrega nenhum provedor direto (GA4, Clarity, counter.dev).
     disableGtm()
+    return
   }
-  else {
-    enableGtm(config)
-  }
+  enableGtm(config)
 
   if (config.loadGtag) {
     injectScript({
@@ -44,8 +45,15 @@ export default defineNuxtPlugin(() => {
     })
     const window_ = window as AnalyticsWindow
     window_.dataLayer = window_.dataLayer ?? []
-    window_.dataLayer.push(['js', new Date()])
-    window_.dataLayer.push(['config', config.ga4Id])
+    // gtag.js só processa objetos `arguments`; arrays simples são ignorados
+    // e nenhum hit /g/collect era enviado.
+    window_.gtag = function gtag() {
+      // eslint-disable-next-line prefer-rest-params
+      // biome-ignore lint/complexity/noArguments: gtag.js requires the arguments object
+      window_.dataLayer?.push(arguments)
+    }
+    window_.gtag('js', new Date())
+    window_.gtag('config', config.ga4Id)
   }
 
   if (config.loadClarity) {

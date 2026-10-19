@@ -7,6 +7,7 @@ interface Props {
   ariaHidden?: boolean
   title?: string
   loading?: 'eager' | 'lazy'
+  fetchPriority?: 'high' | 'low' | 'auto'
   ariaLabel?: string
 }
 
@@ -23,6 +24,7 @@ withDefaults(defineProps<Props>(), {
     :title="title"
     :aria-hidden="ariaHidden"
     :loading="loading"
+    :fetchpriority="fetchPriority"
     :aria-label="ariaLabel"
     :width="width"
     :height="height"
