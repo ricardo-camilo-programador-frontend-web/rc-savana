@@ -9,6 +9,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "typecheck": "nuxi typecheck",
+    "lint": "biome check .",
+    "test": "vitest run",
     "lint:fix": "eslint **/*.{ts,js,vue,html} --fix",
     "format": "prettier --write **/*.{js,ts,html,vue}",
     "fix": "pnpm run format && pnpm run lint:fix",
@@ -58,6 +61,9 @@
     "nuxt-headlessui": "^1.2.2",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tailwindcss": "^4.1.18"
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.5",
+    "vue-tsc": "^2.2.12"
   }
 }

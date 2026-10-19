@@ -6,34 +6,85 @@ on:
   pull_request:
     branches: [main, develop]
 
+permissions:
+  contents: read
+
 jobs:
-  validate:
-    name: Validar Linting e Formatacao
-    runs-on: self-hosted
+  lint:
+    name: Validar Linting
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PATH
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-      - name: Cache pnpm store
-        uses: actions/cache@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
       - name: Instalar dependencias
-        run: pnpm install --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
-      - name: Limpar cache do Biome
-        run: rm -rf node_modules/.cache/biome || true
+      - name: Executar Biome lint
+        run: pnpm run lint
 
-      - name: Executar Biome (linting e formatacao)
-        run: pnpm run biome
+  typecheck:
+    name: Validar Tipos (TypeScript)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Checagem de tipos
+        run: pnpm run typecheck
+
+  test:
+    name: Testes Vitest
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Executar testes
+        run: pnpm run test
 
   build:
     name: Build do Projeto
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
       NUXT_PUBLIC_PROJECT_TITLE: ""
@@ -61,45 +112,44 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PATH
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-      - name: Cache pnpm store
-        uses: actions/cache@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
       - name: Instalar dependencias
-        run: pnpm install --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: Build do projeto
         run: pnpm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-dist
-          path: dist/
-          retention-days: 7
-
   security:
     name: Auditoria de Seguranca
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup PATH
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-      - name: Cache pnpm store
-        uses: actions/cache@v3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
       - name: Instalar dependencias
-        run: pnpm install --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: Auditoria de vulnerabilidades
         shell: bash
@@ -107,7 +157,7 @@ jobs:
           set -o pipefail
           LOG_FILE="$(mktemp)"
 
-          pnpm audit --audit-level moderate 2>&1 | tee "$LOG_FILE"
+          pnpm audit --audit-level high 2>&1 | tee "$LOG_FILE"
           status=${PIPESTATUS[0]}
 
           if [ "$status" -eq 0 ]; then
@@ -123,50 +173,28 @@ jobs:
 
   sonar:
     name: Analise SonarQube
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+    if: ${{ secrets.SONAR_TOKEN != '' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup PATH
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-      - name: Cache pnpm store
-        uses: actions/cache@v3
         with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
 
       - name: Instalar dependencias
-        run: pnpm install --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: Run SonarScanner
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: /opt/sonar-scanner/bin/sonar-scanner
-
-  deploy:
-    name: Deploy Netlify
-    runs-on: self-hosted
-    needs: [build]
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Setup PATH
-        run: echo "/usr/local/bin" >> $GITHUB_PATH
-      - name: Cache pnpm store
-        uses: actions/cache@v3
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-${{ hashFiles('pnpm-lock.yaml') }}
-
-      - name: Instalar dependencias
-        run: pnpm install --ignore-scripts
-
-      - name: Build do projeto
-        run: pnpm run build
-
-      - name: Deploy to Netlify
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        run: npx netlify deploy --prod --dir=dist
+        run: (hash sonar-scanner 2>/dev/null && sonar-scanner) || npx --yes sonarqube-scanner

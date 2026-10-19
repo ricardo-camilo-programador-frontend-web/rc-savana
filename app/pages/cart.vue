@@ -18,7 +18,7 @@ const total = computed(() => cartStore.getCartTotal())
 const isEmpty = computed(() => cartStore.isEmpty)
 
 // Available coupons (in real app, this would come from API)
-const availableCoupons: Coupon[] = [
+const availableCoupons: Array<Coupon> = [
   { code: 'WELCOME10', discountPercent: 10, discountFixed: 0, minOrderValue: 50 },
   { code: 'FREESHIP', discountPercent: 0, discountFixed: 15.90, minOrderValue: 100 },
   { code: 'SAVE20', discountPercent: 20, discountFixed: 0, minOrderValue: 200 },
@@ -145,6 +145,8 @@ useHead({
                     <Image
                       :src="item.imageSrc"
                       :alt="item.altText"
+                      :width="96"
+                      :height="96"
                       class="h-full w-full object-cover"
                     />
                   </div>
