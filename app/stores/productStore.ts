@@ -34,6 +34,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.premiumCatFoodAltText',
         featured: true,
         bestSelling: true,
+        category: 'food',
       },
       {
         id: 'leather-dog-collar',
@@ -45,6 +46,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.dogCollarAltText',
         featured: false,
         bestSelling: true,
+        category: 'accessories',
       },
       {
         id: 'cat-scratching-post',
@@ -56,6 +58,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.scratchingPostAltText',
         featured: true,
         bestSelling: false,
+        category: 'furniture',
       },
       {
         id: 'bird-cage-deluxe',
@@ -67,6 +70,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.birdCageAltText',
         featured: true,
         bestSelling: true,
+        category: 'furniture',
       },
       {
         id: 'hamster-habitat',
@@ -78,6 +82,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.hamsterHabitatAltText',
         featured: false,
         bestSelling: true,
+        category: 'furniture',
       },
       {
         id: 'fish-tank-filter',
@@ -89,6 +94,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.fishFilterAltText',
         featured: true,
         bestSelling: true,
+        category: 'accessories',
       },
       {
         id: 'dog-grooming-kit',
@@ -100,6 +106,7 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.groomingKitAltText',
         featured: true,
         bestSelling: true,
+        category: 'accessories',
       },
       {
         id: 'cat-litter-box',
@@ -111,11 +118,13 @@ export const useProductStore = defineStore('productStore', {
         altText: 'products.litterBoxAltText',
         featured: true,
         bestSelling: true,
+        category: 'furniture',
       },
       ...createProductVariations(
         'products.premiumDogFood',
         18.99,
         'products.premiumDogFoodAltText',
+        'food',
         [
           {
             id: 'premium-dog-food-orange-1',
@@ -186,6 +195,7 @@ export const useProductStore = defineStore('productStore', {
         'products.premiumCatFood',
         18.99,
         'products.premiumCatFoodAltText',
+        'food',
         [
           {
             id: 'premium-cat-food-1',

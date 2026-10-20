@@ -1,3 +1,5 @@
+import type { CategoryId } from './categories'
+
 export interface Product {
   id: string
   imageSrc: string
@@ -8,6 +10,7 @@ export interface Product {
   featured: boolean
   bestSelling: boolean
   favorite: boolean
+  category: CategoryId
 }
 
 export interface CartItem extends Product {
