@@ -8,8 +8,9 @@ declare module '*.vue' {
 }
 
 interface ImportMetaEnv extends Readonly<Record<string, string>> {
-  readonly NUXT_PUBLIC_TITLE: string
-  readonly NUXT_PUBLIC_URL: string
+  readonly NUXT_PUBLIC_PROJECT_TITLE: string
+  readonly NUXT_PUBLIC_BASE_URL: string
+  readonly NUXT_PUBLIC_SITE_URL: string
 }
 
 declare global {

@@ -9,14 +9,27 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      script: [
+      htmlAttrs: { lang: 'pt-BR' },
+      title: 'Savana Pet Shop - Sua Loja de Produtos para Animais',
+      meta: [
         {
-          'src': 'https://cdn.counter.dev/script.js',
-          'type': 'text/javascript',
-          'defer': true,
-          'data-id': process.env.COUNTER_API_KEY,
-          'data-utcoffset': '-3',
-          'async': true,
+          name: 'description',
+          content:
+            'Encontre os melhores produtos para seu pet: rações, brinquedos, acessórios e muito mais. Entrega para todo o Brasil.',
+        },
+        {
+          property: 'og:title',
+          content: 'Savana Pet Shop - Sua Loja de Produtos para Animais',
+        },
+        {
+          property: 'og:description',
+          content:
+            'Encontre os melhores produtos para seu pet: rações, brinquedos, acessórios e muito mais. Entrega para todo o Brasil.',
+        },
+        { property: 'og:type', content: 'website' },
+        {
+          property: 'og:url',
+          content: 'https://savana-nuxtjs-chronicles-part-1.netlify.app',
         },
       ],
     },
@@ -56,9 +69,9 @@ export default defineNuxtConfig({
       },
       {
         code: 'pt',
-        language: 'pt',
+        language: 'pt-BR',
         name: 'Português',
-        iso: 'pt',
+        iso: 'pt-BR',
         file: 'pt.ts',
       },
     ],
@@ -145,12 +158,22 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
+      // Analytics: NUXT_PUBLIC_<CHAVE> sobrescreve em runtime; DEFAULTS em app/lib/analytics/config.ts
+      ANALYTICS_ENABLED: process.env.NUXT_PUBLIC_ANALYTICS_ENABLED,
+      CLARITY_ID: process.env.NUXT_PUBLIC_CLARITY_ID,
+      GA4_ID: process.env.NUXT_PUBLIC_GA4_ID,
+      GTM_ENABLED: process.env.NUXT_PUBLIC_GTM_ENABLED,
+      GTM_GA4_ID: process.env.NUXT_PUBLIC_GTM_GA4_ID,
+      COUNTER_ID: process.env.NUXT_PUBLIC_COUNTER_ID,
+      COUNTER_UTCOFFSET: process.env.NUXT_PUBLIC_COUNTER_UTCOFFSET,
+      // Legados (fallback): NUXT_PUBLIC_GA_MEASUREMENT_ID, NUXT_PUBLIC_COUNTER_DEV_ID
+      GA_MEASUREMENT_ID: process.env.NUXT_PUBLIC_GA_MEASUREMENT_ID,
+      COUNTER_DEV_ID: process.env.NUXT_PUBLIC_COUNTER_DEV_ID,
       FIGMA_USERNAME: process.env.NUXT_PUBLIC_FIGMA_USERNAME,
       FIGMA_ORIGINAL_DESIGN: process.env.NUXT_PUBLIC_FIGMA_ORIGINAL_DESIGN,
       PROJECT_TITLE: process.env.NUXT_PUBLIC_PROJECT_TITLE,
       BASE_URL: process.env.NUXT_PUBLIC_BASE_URL,
-      COUNTER_API_KEY: process.env.COUNTER_API_KEY,
-      TREFLE_API_KEY: process.env.TREFLE_API_KEY,
+      TREFLE_API_KEY: process.env.NUXT_PUBLIC_TREFLE_API_KEY,
       FACEBOOK_ID: process.env.NUXT_PUBLIC_FACEBOOK_ID,
       YOUTUBE_USERNAME: process.env.NUXT_PUBLIC_YOUTUBE_USERNAME,
       LIVE_DEMO_VIDEO_URL: process.env.NUXT_PUBLIC_LIVE_DEMO_VIDEO_URL,

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -21,7 +21,7 @@
     ]
   },
   "formatter": {
-    "enabled": true,
+    "enabled": false,
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
@@ -33,16 +33,7 @@
     "actions": {
       "source": {
         "organizeImports": {
-          "level": "on",
-          "options": {
-            "groups": [
-              { "type": true, "source": [":NODE:", ":URL:"] },
-              { "type": true, "source": ":BUN:" },
-              { "type": true },
-              ":URL:",
-              ":NODE:"
-            ]
-          }
+          "level": "off"
         }
       }
     }
@@ -90,14 +81,7 @@
   },
   "javascript": {
     "formatter": {
-      "enabled": true,
-      "quoteStyle": "single",
-      "semicolons": "asNeeded",
-      "trailingCommas": "all",
-      "quoteProperties": "preserve",
-      "arrowParentheses": "asNeeded",
-      "operatorLinebreak": "before",
-      "lineEnding": "lf"
+      "enabled": false
     },
     "linter": {
       "enabled": true
@@ -111,23 +95,6 @@
           "a11y": {
             "useValidAutocomplete": "off"
           }
-        }
-      },
-      "formatter": {
-        "attributePosition": "auto"
-      },
-      "javascript": {
-        "formatter": {
-          "operatorLinebreak": "before"
-        }
-      }
-    },
-    {
-      "includes": ["**/*.ts"],
-      "javascript": {
-        "formatter": {
-          "trailingCommas": "all",
-          "operatorLinebreak": "before"
         }
       }
     }

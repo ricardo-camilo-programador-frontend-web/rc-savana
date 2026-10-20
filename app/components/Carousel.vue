@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends Record<string, any> = Record<string, any>">
 interface CarouselButtonConfig {
   color?: string
   icon?: string
@@ -13,12 +13,8 @@ interface ResponsiveConfig {
   xl?: number | string
 }
 
-interface CarouselItem {
-  [key: string]: unknown
-}
-
 interface CarouselProps {
-  items?: Array<CarouselItem>
+  items?: Array<T>
   dir?: 'ltr' | 'rtl'
   arrows?: boolean
   indicators?: boolean
@@ -40,6 +36,10 @@ interface CarouselProps {
   autoScrollEasing?: string
   autoScrollSnap?: boolean
 }
+
+defineSlots<{
+  default(props: { item: T; index?: number }): unknown
+}>()
 
 const props = withDefaults(defineProps<CarouselProps>(), {
   items: () => [],
@@ -142,7 +142,10 @@ onMounted(() => setupAutoplay(carouselRef, props.autoplayInterval))
     :auto-scroll="autoScroll"
   >
     <template #default="slotProps">
-      <slot v-bind="{ ...slotProps }" />
+      <slot
+        :item="(slotProps.item as unknown as T)"
+        :index="slotProps.index"
+      />
     </template>
   </UCarousel>
 </template>
