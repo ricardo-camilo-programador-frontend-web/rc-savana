@@ -111,19 +111,21 @@ export const useCheckoutStore = defineStore('checkoutStore', () => {
     step.value = newStep
   }
 
+  const stepOrder: Array<CheckoutState['step']> = ['customer', 'shipping', 'payment', 'review']
+
   function nextStep() {
-    const stepOrder: CheckoutState['step'][] = ['customer', 'shipping', 'payment', 'review']
     const currentIndex = stepOrder.indexOf(step.value)
-    if (currentIndex < stepOrder.length - 1) {
-      step.value = stepOrder[currentIndex + 1]
+    const upcomingStep = stepOrder[currentIndex + 1]
+    if (upcomingStep) {
+      step.value = upcomingStep
     }
   }
 
   function prevStep() {
-    const stepOrder: CheckoutState['step'][] = ['customer', 'shipping', 'payment', 'review']
     const currentIndex = stepOrder.indexOf(step.value)
-    if (currentIndex > 0) {
-      step.value = stepOrder[currentIndex - 1]
+    const previousStep = stepOrder[currentIndex - 1]
+    if (previousStep) {
+      step.value = previousStep
     }
   }
 
