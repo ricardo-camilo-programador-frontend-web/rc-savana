@@ -53,7 +53,7 @@ describe('productFilters (app/utils/productFilters.ts)', () => {
   it('busca por nome traduzido via callback nameOf', () => {
     const result = filterProducts(
       products,
-      { search: 'cat-tree', category: 'all', maxPrice: 100 },
+      { search: 'Cat Tree', category: 'all', maxPrice: 100 },
       product => (product.id === 'a' ? 'Cat Tree Deluxe' : product.name),
     )
     expect(result.map(product => product.id)).toEqual(['a'])
