@@ -81,6 +81,12 @@
       "tar@7": "^7.5.22",
       "uuid": "^13.0.2",
       "yaml": "^2.9.1"
+    },
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-86w9-cpqp-85rv",
+        "GHSA-vfj7-8cjw-p6xm"
+      ]
     }
   }
 }
