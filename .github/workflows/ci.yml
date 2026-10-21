@@ -169,12 +169,12 @@ jobs:
   sonar:
     name: Analise SonarQube
     runs-on: ubuntu-latest
-    # `secrets` não é permitido em `if` de job: o token é checado no passo.
-    # SonarQube é self-hosted; sem servidor acessível o job não bloqueia o CI.
-    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+    # SonarQube é self-hosted em localhost:9000; só executa se SONAR_HOST_URL estiver configurado em vars do repo
+    if: ${{ vars.SONAR_HOST_URL != '' }}
     continue-on-error: true
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -194,5 +194,5 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run SonarScanner
-        if: ${{ env.SONAR_TOKEN != '' }}
+        if: ${{ env.SONAR_TOKEN != '' && env.SONAR_HOST_URL != '' }}
         run: (hash sonar-scanner 2>/dev/null && sonar-scanner) || npx --yes sonarqube-scanner
