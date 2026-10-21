@@ -9,13 +9,6 @@ export interface ProductFilterCriteria {
   maxPrice: number
 }
 
-const SORTINGS: Record<ProductSort, (a: Product, b: Product) => number> = {
-  'price-asc': (a, b) => a.price - b.price,
-  'price-desc': (a, b) => b.price - a.price,
-  'name-asc': (a, b) => a.name.localeCompare(b.name),
-  featured: (a, b) => Number(b.featured) - Number(a.featured),
-}
-
 export function maxProductPrice(products: Array<Product>): number {
   return products.reduce((highest, product) => Math.max(highest, product.price), 0)
 }
@@ -40,6 +33,17 @@ export function filterProducts(
   })
 }
 
-export function sortProducts(products: Array<Product>, sort: ProductSort): Array<Product> {
-  return [...products].sort(SORTINGS[sort])
+export function sortProducts(
+  products: Array<Product>,
+  sort: ProductSort,
+  nameOf: (product: Product) => string = product => product.name,
+): Array<Product> {
+  const comparators: Record<ProductSort, (a: Product, b: Product) => number> = {
+    'price-asc': (a, b) => a.price - b.price,
+    'price-desc': (a, b) => b.price - a.price,
+    'name-asc': (a, b) => nameOf(a).localeCompare(nameOf(b)),
+    featured: (a, b) => Number(b.featured) - Number(a.featured),
+  }
+
+  return [...products].sort(comparators[sort])
 }

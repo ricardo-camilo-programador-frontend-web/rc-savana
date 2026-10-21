@@ -66,6 +66,11 @@ describe('productFilters (app/utils/productFilters.ts)', () => {
     expect(products[0].id).toBe('a')
   })
 
+  it('ordena por nome traduzido via callback nameOf (chaves de i18n)', () => {
+    const sorted = sortProducts(products, 'name-asc', product => `${product.id}-nome`)
+    expect(sorted.map(product => product.id)).toEqual(['a', 'b', 'c'])
+  })
+
   it('destaques vêm primeiro na ordenação padrão', () => {
     expect(sortProducts(products, 'featured')[0].id).toBe('a')
   })

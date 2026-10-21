@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { availableCategories } from '~/utils/productFilters'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const productStore = useProductStore()
 const categoriesStore = useCategoriesStore()
 
@@ -92,7 +92,7 @@ const sortOptions = [
           for="product-max-price"
           class="text-sm font-semibold text-gray-700"
         >
-          {{ t('shop.filters.maxPrice') }}: {{ maxPrice.toLocaleString() }}
+          {{ t('shop.filters.maxPrice') }}: {{ maxPrice.toLocaleString(locale) }}
         </label>
         <input
           id="product-max-price"
@@ -147,6 +147,8 @@ const sortOptions = [
 
     <div
       v-if="filteredProducts.length > 0"
+      role="list"
+      :aria-label="t('shop.filters.listAriaLabel')"
       class="mx-auto grid w-full min-w-[17rem] grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
     >
       <FeatureCard

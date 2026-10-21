@@ -203,6 +203,7 @@ export default {
       clear: 'Limpar filtros',
       resultsCount: '{n} produto encontrado | {n} produtos encontrados',
       empty: 'Nenhum produto encontrado com esses filtros.',
+      listAriaLabel: 'Lista de produtos',
     },
   },
   pets: {
