@@ -50,6 +50,15 @@ describe('productFilters (app/utils/productFilters.ts)', () => {
     expect(result.map(product => product.id)).toEqual(['b'])
   })
 
+  it('busca por nome traduzido via callback nameOf', () => {
+    const result = filterProducts(
+      products,
+      { search: 'cat-tree', category: 'all', maxPrice: 100 },
+      product => (product.id === 'a' ? 'Cat Tree Deluxe' : product.name),
+    )
+    expect(result.map(product => product.id)).toEqual(['a'])
+  })
+
   it('combina busca + categoria + preço', () => {
     const result = filterProducts(products, { search: 'alimento', category: 'food', maxPrice: 20 })
     expect(result.map(product => product.id)).toEqual(['c'])

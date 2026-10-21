@@ -1,6 +1,5 @@
 import type { CategoryId } from '~/types/categories'
 import type { Product } from '~/types/product'
-import { useTranslateProducts } from '~/composables/useTranslateProduct'
 import {
   filterProducts,
   maxProductPrice,
@@ -35,6 +34,8 @@ export function useProductFilters() {
   const router = useRouter()
   const productStore = useProductStore()
   const categoriesStore = useCategoriesStore()
+
+  const { t } = useI18n()
 
   const highestProductPrice = computed(() => maxProductPrice(productStore.products))
 
@@ -116,24 +117,28 @@ export function useProductFilters() {
 
   const translatedNames = computed(() => {
     const namesById = new Map<string, string>()
-    for (const product of useTranslateProducts(productStore.products)) {
-      namesById.set(product.id, product.name)
+    for (const product of productStore.products) {
+      namesById.set(product.id, t(product.name))
     }
     return namesById
   })
 
+  function getProductName(product: Product): string {
+    return translatedNames.value.get(product.id) ?? product.name
+  }
+
   const filteredProducts = computed<Array<Product>>(() => {
-    const translatedProducts = useTranslateProducts(productStore.products)
-    const matchedIds = new Set(
-      filterProducts(translatedProducts, {
+    const filtered = filterProducts(
+      productStore.products,
+      {
         search: search.value,
         category: category.value,
         maxPrice: maxPrice.value,
-      }).map(product => product.id),
+      },
+      getProductName,
     )
-    const matched = productStore.products.filter(product => matchedIds.has(product.id))
 
-    return sortProducts(matched, sort.value, product => translatedNames.value.get(product.id) ?? product.name)
+    return sortProducts(filtered, sort.value, getProductName)
   })
 
   function clearFilters() {

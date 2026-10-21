@@ -21,11 +21,12 @@ export function availableCategories(products: Array<Product>): Array<CategoryId>
 export function filterProducts(
   products: Array<Product>,
   { search, category, maxPrice }: ProductFilterCriteria,
+  nameOf: (product: Product) => string = product => product.name,
 ): Array<Product> {
   const normalizedSearch = search.trim().toLocaleLowerCase()
 
   return products.filter(product => {
-    const matchesSearch = product.name.toLocaleLowerCase().includes(normalizedSearch)
+    const matchesSearch = nameOf(product).toLocaleLowerCase().includes(normalizedSearch)
     const matchesCategory = category === 'all' || product.category === category
     const matchesPrice = product.price <= maxPrice
 
