@@ -1,5 +1,7 @@
+export type CategoryId = 'accessories' | 'food' | 'furniture' | 'bags'
+
 export interface CategoryItem {
-  id: string
+  id: CategoryId
   title: string
   productCount: number
   gradientClass: string

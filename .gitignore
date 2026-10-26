@@ -27,3 +27,4 @@ logs
 # Sonar
 sonar-project.properties
 .scannerwork/
+.worktrees/
