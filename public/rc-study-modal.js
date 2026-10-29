@@ -19,18 +19,18 @@ window.RC_STUDY_MODAL={"emoji": "\ud83e\udd81", "title": "Savana", "stack": "Nux
 
   function load() {
     var s = {};
-    try { s = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
+    try { s = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch {}
     if (typeof s.analyticsEnabled !== "boolean") s.analyticsEnabled = true;
     if (s.lastVisit && Date.now() - new Date(s.lastVisit).getTime() > 3600000) s.hasSeenModal = false;
     return s;
   }
   var state = load();
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} }
   state.lastVisit = new Date().toISOString(); save();
 
   function applyConsent(on) {
-    try { if (window.gtag) window.gtag("consent", "update", { analytics_storage: on ? "granted" : "denied", ad_storage: on ? "granted" : "denied" }); } catch (e) {}
-    try { if (window.clarity) window.clarity("consent", on); } catch (e) {}
+    try { if (window.gtag) window.gtag("consent", "update", { analytics_storage: on ? "granted" : "denied", ad_storage: on ? "granted" : "denied" }); } catch {}
+    try { if (window.clarity) window.clarity("consent", on); } catch {}
     window.dispatchEvent(new CustomEvent("rc-study-modal:analytics", { detail: on }));
   }
 
