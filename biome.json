@@ -17,7 +17,8 @@
       "!**/coverage",
       "!**/dist",
       "!**/dev-dist/",
-      "!**/*.tsbuildinfo"
+      "!**/*.tsbuildinfo",
+      "!**/public/rc-study-modal.js"
     ]
   },
   "formatter": {
@@ -40,7 +41,13 @@
   },
   "linter": {
     "enabled": true,
-    "includes": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.vue"],
+    "includes": [
+      "**/*.js",
+      "**/*.jsx",
+      "**/*.ts",
+      "**/*.tsx",
+      "**/*.vue"
+    ],
     "rules": {
       "recommended": true,
       "correctness": {
@@ -68,7 +75,14 @@
       "suspicious": {
         "noExplicitAny": "warn",
         "noArrayIndexKey": "warn",
-        "noConsole": { "level": "off", "options": { "allow": ["log"] } }
+        "noConsole": {
+          "level": "off",
+          "options": {
+            "allow": [
+              "log"
+            ]
+          }
+        }
       },
       "a11y": {
         "useValidAutocomplete": "off"
@@ -89,7 +103,9 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.vue"],
+      "includes": [
+        "**/*.vue"
+      ],
       "linter": {
         "rules": {
           "a11y": {
