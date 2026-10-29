@@ -9,6 +9,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      script: [{ src: '/rc-study-modal.js', defer: true }],
       htmlAttrs: { lang: 'pt-BR' },
       title: 'Savana Pet Shop - Sua Loja de Produtos para Animais',
       meta: [
