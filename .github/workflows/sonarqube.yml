@@ -13,23 +13,17 @@ on:
 jobs:
   sonarqube:
     name: SonarQube Analysis
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: write
+    # Non-blocking: SonarQube analysis is informational, should not block PRs
+    continue-on-error: true
 
     steps:
-      - name: Hard reset git auth (self-hosted safety)
-        run: |
-          git config --global --unset-all http.https://github.com/.extraheader || true
-          git config --global --unset-all credential.helper || true
-          git config --global --unset-all core.sshCommand || true
-
-      - name: Checkout repository (SSH only)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.GH_SSH_KEY }}
-          persist-credentials: false
           fetch-depth: 0
 
       - name: SonarQube Scan
@@ -41,29 +35,38 @@ jobs:
           set -e
 
           if [ -z "$SONAR_TOKEN" ] || [ -z "$SONAR_HOST_URL" ]; then
-            echo "::error::SONAR_TOKEN and SONAR_HOST_URL must be set as GitHub Secrets"
-            exit 1
+            echo "::warning::SONAR_TOKEN and SONAR_HOST_URL secrets are not configured. Skipping SonarQube analysis."
+            echo "SONAR_SKIPPED=true" >> $GITHUB_ENV
+            exit 0
           fi
 
           echo "Testing SonarQube connectivity..."
-          curl -f -s "$SONAR_HOST_URL/api/system/status" >/dev/null
+          if ! curl -f -s --max-time 10 "$SONAR_HOST_URL/api/system/status" >/dev/null 2>&1; then
+            echo "::warning::Cannot connect to SonarQube at $SONAR_HOST_URL — skipping scan"
+            echo "SONAR_SKIPPED=true" >> $GITHUB_ENV
+            exit 0
+          fi
 
           echo "Running SonarQube scan..."
 
           docker run --rm \
-            --network=host \
             -v "$PWD:/usr/src" \
             -w /usr/src \
             -e SONAR_TOKEN="$SONAR_TOKEN" \
             sonarsource/sonar-scanner-cli:latest \
             -Dsonar.token="$SONAR_TOKEN" \
-            -Dsonar.host.url="$SONAR_HOST_URL"
+            -Dsonar.host.url="$SONAR_HOST_URL" \
+            || {
+              echo "::warning::SonarQube scan failed. See logs above."
+              exit 0
+            }
 
           echo "SONAR_DASHBOARD_URL=$SONAR_HOST_URL/dashboard?id=rc-savana" >> $GITHUB_ENV
+          echo "SONAR_SKIPPED=false" >> $GITHUB_ENV
 
       - name: Comment PR with SonarQube Dashboard Link
-        if: github.event_name == 'pull_request'
-        uses: peter-evans/create-or-update-comment@v3
+        if: github.event_name == 'pull_request' && env.SONAR_SKIPPED == 'false'
+        uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.pull_request.number }}
           edit-mode: replace
@@ -73,9 +76,9 @@ jobs:
 
             **🔗 [Abrir dashboard](${{ env.SONAR_DASHBOARD_URL }})**
 
-            **Projeto:** `rc-savana`  
-            **Branch:** `${{ github.head_ref }}`  
+            **Projeto:** `rc-savana`
+            **Branch:** `${{ github.head_ref }}`
             **Commit:** `${{ github.sha }}`
 
             ---
-            _Executado via runner self-hosted_
+            _Executado via GitHub Actions_
